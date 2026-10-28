@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Ana Sayfa — YapımMaliyet{% endblock %}
+{% block page_title %}Ana Sayfa{% endblock %}
+{% block content %}
+<div class="cards">
+  <div class="card">
+    <div class="k">Aktif proje</div>
+    <div class="v">{{ overview.active_projects }}</div>
+  </div>
+  <div class="card g">
+    <div class="k">Açık keşif</div>
+    <div class="v">{{ overview.open_estimates }}</div>
+  </div>
+  <div class="card a">
+    <div class="k">Yaklaşık maliyet hesabı</div>
+    <div class="v">{{ overview.cost_calcs }}</div>
+  </div>
+  <div class="card p">
+    <div class="k">Teklif hesabı</div>
+    <div class="v">{{ overview.offer_calcs }}</div>
+  </div>
+  <div class="card">
+    <div class="k">Açık sipariş</div>
+    <div class="v">{{ overview.open_orders }}</div>
+  </div>
+</div>
+
+<div class="grid2">
+  <section class="panel">
+    <h2>Yaklaşık maliyet dağılımı</h2>
+    {% if dist %}
+    <div class="bars">
+      {% for d in dist %}
+      <span style="flex:{{ d.pct }};background:{% cycle '#C90000' '#22a06b' '#f08c1a' '#8e1b3f' '#a0522d' '#e8746a' '#8f8282' %}" title="{{ d.name }}"></span>
+      {% endfor %}
+    </div>
+    <div class="legend">
+      {% for d in dist %}
+      <span><i class="dot" style="background:{% cycle '#C90000' '#22a06b' '#f08c1a' '#8e1b3f' '#a0522d' '#e8746a' '#8f8282' %}"></i>{{ d.name }} — {{ d.amount }} TL</span>
+      {% endfor %}
+    </div>
+    <p class="note">Toplam (KDV hariç): {{ dist_total }} TL</p>
+    {% else %}
+    <p class="note">Kesinleşmiş yaklaşık maliyet kaydı yok.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Son İşlemler</h2>
+    {% if activity %}
+    <table>
+      <thead><tr><th>Zaman</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for a in activity|slice:":15" %}
+        <tr><td class="note" style="white-space:nowrap">{{ a.at|slice:":16" }}</td><td>{{ a.text }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Henüz kayıt yok.</p>
+    {% endif %}
+  </section>
+</div>
+
+{% if projects %}
+<section class="panel" style="margin-top:12px">
+  <h2>Projeler</h2>
+  <table>
+    <thead><tr><th>Proje</th><th>Durum</th><th>İhale tarihi</th></tr></thead>
+    <tbody>
+      {% for p in projects %}
+      <tr>
+        <td><a href="{% url 'project_detail' p.id %}">{{ p.name }}</a></td>
+        <td>
+          {% if p.status == "DEVAM" %}<span class="pill">Devam</span>
+          {% elif p.status == "TASLAK" %}<span class="pill warn">Taslak</span>
+          {% elif p.status == "TAMAMLANDI" %}<span class="pill gray">Tamamlandı</span>
+          {% else %}<span class="pill gray">{{ p.status }}</span>{% endif %}
+        </td>
+        <td>{{ p.tender_date|default:"—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

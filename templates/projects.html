@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Proje Merkezi — YapımMaliyet{% endblock %}
+{% block page_title %}Proje Merkezi{% endblock %}
+{% block content %}
+<section class="panel">
+  <table>
+    <thead>
+      <tr><th>Proje</th><th>Durum</th><th>Keşif</th><th class="num">Yaklaşık maliyet (TL)</th><th>İhale tarihi</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td><a href="{% url 'project_detail' r.project.id %}">{{ r.project.name }}</a></td>
+        <td>
+          {% if r.project.status == "DEVAM" %}<span class="pill">Devam</span>
+          {% elif r.project.status == "TASLAK" %}<span class="pill warn">Taslak</span>
+          {% elif r.project.status == "TAMAMLANDI" %}<span class="pill gray">Tamamlandı</span>
+          {% elif r.project.status == "ARSIV" %}<span class="pill gray">Arşiv</span>
+          {% else %}<span class="pill gray">{{ r.project.status }}</span>{% endif %}
+        </td>
+        <td>{{ r.estimate_count }}</td>
+        <td class="num">{{ r.cost }}</td>
+        <td>{{ r.project.tender_date|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="note">Proje yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

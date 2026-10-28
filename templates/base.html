@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}YapımMaliyet{% endblock %}</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+<aside class="side">
+  <div class="brand">
+    <svg width="28" height="26" viewBox="0 0 500 460" aria-hidden="true"><g fill="#C90000"><path d="M168 90H460q6 0 1 8l-22 32q-20 30-55 30H87l24-38q21-32 57-32z"/><path d="M119 195h250q6 0 1 8l-22 33q-19 29-54 29H37l25-39q20-31 57-31z"/><path d="M126 300h184q6 0-5 8l-23 33q-19 29-54 29H55l24-38q20-32 47-32z"/></g></svg>
+    YapımMaliyet
+  </div>
+  <nav class="nav">
+    <div class="grp">Genel</div>
+    <a href="{% url 'home' %}" class="{% if page == 'home' %}active{% endif %}">⊞ Ana Sayfa</a>
+    <div class="grp">Projeler</div>
+    <a href="{% url 'projects' %}" class="{% if page == 'projects' %}active{% endif %}">▤ Proje Merkezi</a>
+    <div class="grp">Fiyat</div>
+    <a href="{% url 'library' %}" class="{% if page == 'library' %}active{% endif %}">📚 Birim Fiyat Kütüphanesi</a>
+    <div class="grp">Çıktı</div>
+    <a href="{% url 'reports' %}" class="{% if page == 'reports' %}active{% endif %}">🖨 Raporlar</a>
+    <div class="grp">Sistem</div>
+    <a href="{% url 'settings' %}" class="{% if page == 'settings' %}active{% endif %}">⚙ Ayarlar</a>
+  </nav>
+</aside>
+<div class="main">
+  <header class="top">
+    <h1>{% block page_title %}YapımMaliyet{% endblock %}</h1>
+    <div class="grow"></div>
+    {% block topbar %}{% endblock %}
+  </header>
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+</div>
+</body>
+</html>

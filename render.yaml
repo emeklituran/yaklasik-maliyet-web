@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: yaklasik-maliyet-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate --noinput
+    startCommand: gunicorn yapweb.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: yaklasik-maliyet-web.onrender.com
+      - key: YAPIMMALIYET_VERI
+        value: /tmp/yapimmaliyet-web-data
+      - key: YAPIMMALIYET_TOHUM
+        value: "0"

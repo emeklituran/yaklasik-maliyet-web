@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Birim Fiyat Kütüphanesi — YapımMaliyet{% endblock %}
+{% block page_title %}Birim Fiyat Kütüphanesi{% endblock %}
+{% block topbar %}
+<form method="get" style="display:contents">
+  <input type="text" name="q" value="{{ q }}" placeholder="Poz kodu veya tanım ara…" class="search"
+         autocomplete="off">
+</form>
+{% endblock %}
+{% block content %}
+<form method="get" id="filter-form">
+  <input type="hidden" name="q" value="{{ q }}">
+  <div class="filters">
+    <select name="authority" onchange="document.getElementById('filter-form').submit()">
+      <option value="">— Tüm idareler —</option>
+      {% for a in authorities %}
+      <option value="{{ a.id }}" {% if sel_authority == a.id|stringformat:"d" %}selected{% endif %}>{{ a.name }}</option>
+      {% endfor %}
+    </select>
+    <select name="book" onchange="document.getElementById('filter-form').submit()">
+      <option value="">— Tüm kitaplar —</option>
+      {% for b in books %}
+      <option value="{{ b.id }}" {% if sel_book == b.id|stringformat:"d" %}selected{% endif %}>{{ b.title }} ({{ b.year }})</option>
+      {% endfor %}
+    </select>
+    <span class="note">{{ total }} sonuç</span>
+  </div>
+</form>
+
+<section class="panel">
+  <table>
+    <thead>
+      <tr><th>Kod</th><th>Tanım</th><th>Birim</th><th class="num">Birim Fiyat (TL)</th><th>Kitap</th></tr>
+    </thead>
+    <tbody>
+      {% for p in prices %}
+      <tr>
+        <td style="white-space:nowrap;font-family:monospace">{{ p.code }}</td>
+        <td>{{ p.description }}</td>
+        <td>{{ p.unit }}</td>
+        <td class="num">{{ p.price }}</td>
+        <td class="note">{{ p.authority }} / {{ p.book }} {{ p.year }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="note">Sonuç yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if pages > 1 %}
+  <div class="pager">
+    {% if cur_page > 1 %}
+    <a href="?q={{ q }}&authority={{ sel_authority }}&book={{ sel_book }}&page={{ cur_page|add:"-1" }}">‹ Önceki</a>
+    {% endif %}
+    {% for i in pages|default:1|rjust:pages %}
+    {% endfor %}
+    <span class="note">Sayfa {{ cur_page }} / {{ pages }}</span>
+    {% if cur_page < pages %}
+    <a href="?q={{ q }}&authority={{ sel_authority }}&book={{ sel_book }}&page={{ cur_page|add:"1" }}">Sonraki ›</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

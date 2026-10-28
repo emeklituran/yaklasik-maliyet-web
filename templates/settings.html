@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Ayarlar — YapımMaliyet{% endblock %}
+{% block page_title %}Ayarlar{% endblock %}
+{% block content %}
+<section class="panel">
+  <h2>Sistem bilgisi</h2>
+  <div class="row"><span>Sürüm</span><b>{{ info.version }}</b></div>
+  <div class="row"><span>Şema</span><b>{{ info.schema }}</b></div>
+  <div class="row"><span>Veri dizini</span><b style="font-family:monospace;font-size:12px">{{ info.data_dir }}</b></div>
+  <div class="row"><span>Veritabanı</span>
+    <b>{% if info.db_ok %}<span class="pill">Bağlı</span>{% else %}<span class="pill red">Bağlantı yok</span>{% endif %}</b>
+  </div>
+  <p class="note">Bu web arayüzü salt okunurdur. Veri girişi, OCR ve SQLite yazma işlemleri masaüstü uygulamasında yapılır.</p>
+</section>
+{% endblock %}

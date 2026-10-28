@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Raporlar — YapımMaliyet{% endblock %}
+{% block page_title %}Raporlar{% endblock %}
+{% block content %}
+{% for project in projects %}
+<section class="panel" style="margin-bottom:12px">
+  <h2>{{ project.name }}</h2>
+  <table>
+    <thead><tr><th>Rapor</th><th>PDF</th><th>Excel</th></tr></thead>
+    <tbody>
+      {% for code, label in report_types %}
+      <tr>
+        <td>{{ label }}</td>
+        <td><a href="{% url 'report_pdf' project.id code %}">İndir PDF</a></td>
+        <td><a href="{% url 'report_xlsx' project.id code %}">İndir Excel</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% empty %}
+<p class="note">Proje yok.</p>
+{% endfor %}
+{% endblock %}
